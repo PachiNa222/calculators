@@ -87,6 +87,7 @@
             // 1~3つ目の値の合計した値の2.3倍をAとします。
             const sum123 = values[0] + values[1] + values[2];
             const A = sum123 * 2.3;
+            const A2 = (sum123 + 430) * 2.3;
 
             // 5つ目の値を0.16倍した値をBとします。
             const B = values[4] * 0.16;
@@ -107,32 +108,55 @@
             }
 
             // AとDを足したものが計算の答えとなります。
-            const result = Math.ceil(A + D);
+            const result1 = Math.ceil(A + D);
+            const result2 = Math.ceil(A2 + D);
 
             // 評価を計算します。
-            let grade;
-            if (result < 6000) {
-                grade = "C";
-            } else if (result < 8000) {
-                grade = "B";
-            } else if (result < 10000) {
-                grade = "B+";
-            } else if (result < 11500) {
-                grade = "A";
-            } else if (result < 13000) {
-                grade = "A+";
-            } else if (result < 14500) {
-                grade = "S";
-            } else if (result < 16000) {
-                grade = "S+";
-            } else if (result < 18000) {
-                grade = "SS";
+            let grade1;
+            if (result1 < 6000) {
+                grade1 = "C";
+            } else if (result1 < 8000) {
+                grade1 = "B";
+            } else if (result1 < 10000) {
+                grade1 = "B+";
+            } else if (result1 < 11500) {
+                grade1 = "A";
+            } else if (result1 < 13000) {
+                grade1 = "A+";
+            } else if (result1 < 14500) {
+                grade1 = "S";
+            } else if (result1 < 16000) {
+                grade1 = "S+";
+            } else if (result1 < 18000) {
+                grade1 = "SS";
             } else {
-                grade = "SS+";
+                grade1 = "SS+";
+            }
+
+            let grade2;
+            if (result2 < 6000) {
+                grade2 = "C";
+            } else if (result2 < 8000) {
+                grade2 = "B";
+            } else if (result2 < 10000) {
+                grade2 = "B+";
+            } else if (result2 < 11500) {
+                grade2 = "A";
+            } else if (result2 < 13000) {
+                grade2 = "A+";
+            } else if (result2 < 14500) {
+                grade2 = "S";
+            } else if (result2 < 16000) {
+                grade2 = "S+";
+            } else if (result2 < 18000) {
+                grade2 = "SS";
+            } else {
+                grade2 = "SS+";
             }
 
             // 結果を表示
-            resultDiv.textContent = `結果: ${result} (${grade})`;
+            resultDiv.textContent = `最低値: ${result1} (${grade1})`;
+            resultDiv.textContent = `最大値: ${result2} (${grade2})`;
         }
         inputs.forEach(input => {
             input.addEventListener('input', calculate);
