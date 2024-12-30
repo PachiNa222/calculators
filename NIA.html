@@ -87,6 +87,7 @@
             // 1~3つ目の値の合計した値の2.3倍をAとします。
             const sum123 = values[0] + values[1] + values[2];
             const A = sum123 * 2.3;
+            const A2 = (sum123 + 430) * 2.3;
 
             // 5つ目の値を0.16倍した値をBとします。
             const B = values[4] * 0.16;
@@ -108,7 +109,7 @@
 
             // 最低値と最大値を計算
             const resultMin = Math.ceil(A + D);
-            const resultMax = Math.ceil(A + D);
+            const resultMax = Math.ceil(A2 + D);
 
             // 評価を計算します。
             function getGrade(result) {
