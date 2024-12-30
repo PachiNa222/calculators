@@ -54,23 +54,23 @@
     <div class="calculator">
         <h1>リアルタイム計算機</h1>
         <div class="input-group">
-            <label for="input1">入力1 (0〜2000)</label>
+            <label for="input1">Vo</label>
             <input type="number" id="input1" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input2">入力2 (0〜2000)</label>
+            <label for="input2">Da</label>
             <input type="number" id="input2" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input3">入力3 (0〜2000)</label>
+            <label for="input3">Vi</label>
             <input type="number" id="input3" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input4">入力4 (0以上)</label>
+            <label for="input4">ファン投票数</label>
             <input type="number" id="input4" min="0" value="0">
         </div>
         <div class="input-group">
-            <label for="input5">入力5 (0以上)</label>
+            <label for="input5">最終試験スコア</label>
             <input type="number" id="input5" min="0" value="0">
         </div>
         <div class="result" id="result">結果: 0</div>
@@ -81,16 +81,59 @@
         const resultDiv = document.getElementById('result');
 
         function calculate() {
-            // 入力値を取得
+            /// 入力値を取得
             const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
 
-            // 計算式をここに記述 (例としてすべての合計を計算)
-            const result = values.reduce((sum, value) => sum + value, 0);
+            // 1~3つ目の値の合計した値の2.3倍をAとします。
+            const sum123 = values[0] + values[1] + values[2];
+            const A = sum123 * 2.3;
+
+            // 5つ目の値を0.16倍した値をBとします。
+            const B = values[4] * 0.16;
+
+            // 4つ目の値にBと3250を加えたものをCとします。
+            const C = values[3] + B + 3250;
+
+            // Cに基づいてDを計算します。
+            let D;
+            if (C >= 60000 && C < 80000) {
+                D = 1200 + C * 0.065;
+            } else if (C >= 80000 && C < 100000) {
+                D = 1600 + C * 0.06;
+            } else if (C >= 100000) {
+                D = 2100 + C * 0.055;
+            } else {
+                D = 0; // 該当なしの場合は0にします。
+            }
+
+            // AとDを足したものが計算の答えとなります。
+            const result = Math.ceil(A + D);
+
+            // 評価を計算します。
+            let grade;
+            if (result < 6000) {
+                grade = "C";
+            } else if (result < 8000) {
+                grade = "B";
+            } else if (result < 10000) {
+                grade = "B+";
+            } else if (result < 11500) {
+                grade = "A";
+            } else if (result < 13000) {
+                grade = "A+";
+            } else if (result < 14500) {
+                grade = "S";
+            } else if (result < 16000) {
+                grade = "S+";
+            } else if (result < 18000) {
+                grade = "SS";
+            } else {
+                grade = "SS+";
+            }
 
             // 結果を表示
-            resultDiv.textContent = `結果: ${result}`;
+            resultDiv.textContent = `結果: ${result} (${grade})`;
         }
-
         inputs.forEach(input => {
             input.addEventListener('input', calculate);
         });
