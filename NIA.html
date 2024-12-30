@@ -73,7 +73,8 @@
             <label for="input5">最終試験スコア</label>
             <input type="number" id="input5" min="0" value="0">
         </div>
-        <div class="result" id="result">結果: 0</div>
+        <div class="result" id="result"></div>
+        <div class="result2" id="result2"></div>
     </div>
 
     <script>
@@ -156,7 +157,7 @@
 
             // 結果を表示
             resultDiv.textContent = `最低値: ${result1} (${grade1})`;
-            resultDiv.textContent = `最大値: ${result2} (${grade2})`;
+            result2Div.textContent = `最大値: ${result2} (${grade2})`;
         }
         inputs.forEach(input => {
             input.addEventListener('input', calculate);
