@@ -88,6 +88,7 @@
             const sum123 = values[0] + values[1] + values[2];
             const A = sum123 * 2.3;
             const E = (sum123 + 430) * 2.3;
+            const F = (sum123 + 305) * 2.3;
 
             // 5つ目の値を0.16倍した値をBとします。
             const B = values[4] * 0.16;
@@ -110,6 +111,7 @@
             // 最低値と最大値を計算
             const resultMin = Math.ceil(A + D);
             const resultMax = Math.ceil(E + D);
+            const resultAve = Math.ceil(F + D);
 
             // 評価を計算します。
             function getGrade(result) {
@@ -136,9 +138,10 @@
 
             const gradeMin = getGrade(resultMin);
             const gradeMax = getGrade(resultMax);
+            const gradeAve = getGrade(resultAve);
 
             // 結果を表示
-            resultDiv.innerHTML = `最低値: ${resultMin} (${gradeMin})<br>最大値: ${resultMax} (${gradeMax})`;
+            resultDiv.innerHTML = `最低値 : ${resultMin} (${gradeMin})<br>平均値 : ${resultAve} (${gradeAve})<br>最大値 : ${resultMax} (${gradeMax})`;
         }
 
         inputs.forEach(input => {
