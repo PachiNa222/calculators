@@ -70,28 +70,47 @@
             const B = values[4] * 0.16;
 
             // C計算用変数を設定
-            let remainingC = values[3] + B + 3250;
+            let C = values[3] + B + 3250;
             let D = 0;
 
-            // 段階的なDの計算
-            const thresholds = [20000, 20000, 20000, 20000, 20000];
-            const rates = [0.1, 0.085, 0.07, 0.065, 0.06];
-            const fixedBonuses = [2000, 1700, 1400, 1300, 1200];
-
-            for (let i = 0; i < thresholds.length; i++) {
-                if (remainingC > thresholds[i]) {
-                    D += fixedBonuses[i];
-                    remainingC -= thresholds[i];
-                } else {
-                    D += remainingC * rates[i];
-                    remainingC = 0;
-                    break;
-                }
+            // Cに基づいてDを計算。
+            if(C - 20000 > 0){
+                D = D + 2000;
+            }else{
+                D = D + (C * 0.1);
             }
+            C = C - 20000;
 
-            // 残りのCが存在する場合
-            if (remainingC > 0) {
-                D += remainingC * 0.055;
+            if(C - 20000 > 0){
+                D = D + 1700;
+            }else{
+                D = D + (C * 0.085);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + 1400;
+            }else{
+                D = D + (C * 0.07);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + 1300;
+            }else{
+                D = D + (C * 0.065);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + 1200;
+            }else{
+                D = D + (C * 0.06);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + (C * 0.055);
             }
 
             // 最小値、最大値、平均値を計算
