@@ -54,7 +54,7 @@
     <div class="calculator">
         <h1>N.I.A.評価値計算機</h1>
         <h4>最終試験前の値を入力してください</h4>
-        <h6>親愛度20,FINALE,20万点以下が前提のため誤差があります</h6>
+        <h6>親愛度20,FINALE,6万点以上20万点以下と仮定しています</h6>
         <h6>ご了承の程よろしくお願いします</h6>
         <h6>バグなどの連絡はX:@Cet_svまでお願いします</h6>
         <div class="input-group">
@@ -85,39 +85,67 @@
         const resultDiv = document.getElementById('result');
 
         function calculate() {
-            // 入力値を取得
+            // 入力値を取得。
             const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
 
-            // 1~3つ目の値の合計した値の2.3倍をAとします。
+            // 1~3つ目の値の合計した値の2.3倍をAとする。
             const sum123 = values[0] + values[1] + values[2];
             const A = sum123 * 2.3;
             const E = (sum123 + 430) * 2.3;
             const F = (sum123 + 305) * 2.3;
 
-            // 5つ目の値を0.16倍した値をBとします。
+            // 5つ目の値を0.16倍した値をBとする。
             const B = values[4] * 0.16;
 
-            // 4つ目の値にBと3250を加えたものをCとします。
+            // 4つ目の値にBと3250を加えたものをCとする。
             const C = values[3] + B + 3250;
 
-            // Cに基づいてDを計算します。
-            let D;
-            if (C >= 60000 && C < 80000) {
-                D = 1200 + C * 0.065;
-            } else if (C >= 80000 && C < 100000) {
-                D = 1600 + C * 0.06;
-            } else if (C >= 100000) {
-                D = 2100 + C * 0.055;
-            } else {
-                D = 0; // 該当なしの場合は0にします。
+            // Cに基づいてDを計算。
+            if(C - 20000 > 0){
+                D = D + 2000;
+            }else{
+                D = D + (C * 0.1);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + 1700;
+            }else{
+                D = D + (C * 0.085);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + 1400;
+            }else{
+                D = D + (C * 0.07);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + 1300;
+            }else{
+                D = D + (C * 0.065);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + 1200;
+            }else{
+                D = D + (C * 0.06);
+            }
+            C = C - 20000;
+
+            if(C - 20000 > 0){
+                D = D + (C * 0.055);
             }
 
-            // 最低値と最大値を計算
+            // 最低値と最大値を計算。
             const resultMin = Math.ceil(A + D);
             const resultMax = Math.ceil(E + D);
             const resultAve = Math.ceil(F + D);
 
-            // 評価を計算します。
+            // 評価を計算。
             function getGrade(result) {
                 if (result < 6000) {
                     return "C";
@@ -144,7 +172,7 @@
             const gradeMax = getGrade(resultMax);
             const gradeAve = getGrade(resultAve);
 
-            // 結果を表示
+            // 結果を表示。
             resultDiv.innerHTML = `最低値 : ${resultMin} (${gradeMin})<br>平均値 : ${resultAve} (${gradeAve})<br>最大値 : ${resultMax} (${gradeMax})`;
         }
 
