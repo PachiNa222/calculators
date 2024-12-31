@@ -55,10 +55,10 @@
             const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
 
             // Vo, Da, Viの合計値を計算
-            const sum123 = values[0] + values[1] + values[2];
-            const Firstbonus = 1 + (values[5] / 100);
-            const Secondbonus = 1 + (values[6] / 100);
-            const Thirdbonus = 1 + (values[7] / 100);
+            const sum123 = values[3] + values[4] + values[5];
+            const Firstbonus = 1 + (values[0] / 100);
+            const Secondbonus = 1 + (values[1] / 100);
+            const Thirdbonus = 1 + (values[2] / 100);
             const Maxbonus = (172 * Firstbonus) + (142 * Secondbonus) + (116 * Thirdbonus);
 
             // A, E, Fの計算
@@ -67,13 +67,13 @@
             //const F = (sum123 + 305) * 2.3;
 
             // スコア修正値 B
-            const B = values[4] * 0.16;
+            const B = values[7] * 0.16;
 
             // C計算用変数を設定
-            let C = values[3] + B + 3250;
-            let D = 0;
+            let C = values[6] + B + 3250;
 
             // Cに基づいてDを計算。
+            let D = 0;
             if(C - 20000 > 0){
                 D = D + 2000;
             }else{
