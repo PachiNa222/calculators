@@ -85,95 +85,69 @@
         const resultDiv = document.getElementById('result');
 
         function calculate() {
-            // 入力値を取得。
+            // 入力値を取得
             const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
 
-            // 1~3つ目の値の合計した値の2.3倍をAとする。
+            // Vo, Da, Viの合計値を計算
             const sum123 = values[0] + values[1] + values[2];
+
+            // A, E, Fの計算
             const A = sum123 * 2.3;
             const E = (sum123 + 430) * 2.3;
             const F = (sum123 + 305) * 2.3;
 
-            // 5つ目の値を0.16倍した値をBとする。
+            // スコア修正値 B
             const B = values[4] * 0.16;
 
-            // 4つ目の値にBと3250を加えたものをCとする。
-            const C = values[3] + B + 3250;
+            // C計算用変数を設定
+            let remainingC = values[3] + B + 3250;
+            let D = 0;
 
-            // Cに基づいてDを計算。
-            const D;
-            if(C - 20000 > 0){
-                D = D + 2000;
-            }else{
-                D = D + (C * 0.1);
-            }
-            C = C - 20000;
+            // 段階的なDの計算
+            const thresholds = [20000, 20000, 20000, 20000, 20000];
+            const rates = [0.1, 0.085, 0.07, 0.065, 0.06];
+            const fixedBonuses = [2000, 1700, 1400, 1300, 1200];
 
-            if(C - 20000 > 0){
-                D = D + 1700;
-            }else{
-                D = D + (C * 0.085);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1400;
-            }else{
-                D = D + (C * 0.07);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1300;
-            }else{
-                D = D + (C * 0.065);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1200;
-            }else{
-                D = D + (C * 0.06);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + (C * 0.055);
+            for (let i = 0; i < thresholds.length; i++) {
+                if (remainingC > thresholds[i]) {
+                    D += fixedBonuses[i];
+                    remainingC -= thresholds[i];
+                } else {
+                    D += remainingC * rates[i];
+                    remainingC = 0;
+                    break;
+                }
             }
 
-            // 最低値と最大値を計算。
+            // 残りのCが存在する場合
+            if (remainingC > 0) {
+                D += remainingC * 0.055;
+            }
+
+            // 最小値、最大値、平均値を計算
             const resultMin = Math.ceil(A + D);
             const resultMax = Math.ceil(E + D);
             const resultAve = Math.ceil(F + D);
 
-            // 評価を計算。
+            // 評価計算
             function getGrade(result) {
-                if (result < 6000) {
-                    return "C";
-                } else if (result < 8000) {
-                    return "B";
-                } else if (result < 10000) {
-                    return "B+";
-                } else if (result < 11500) {
-                    return "A";
-                } else if (result < 13000) {
-                    return "A+";
-                } else if (result < 14500) {
-                    return "S";
-                } else if (result < 16000) {
-                    return "S+";
-                } else if (result < 18000) {
-                    return "SS";
-                } else {
-                    return "SS+";
-                }
+                if (result < 6000) return "C";
+                if (result < 8000) return "B";
+                if (result < 10000) return "B+";
+                if (result < 11500) return "A";
+                if (result < 13000) return "A+";
+                if (result < 14500) return "S";
+                if (result < 16000) return "S+";
+                if (result < 18000) return "SS";
+                return "SS+";
             }
 
+            // グレードを取得
             const gradeMin = getGrade(resultMin);
             const gradeMax = getGrade(resultMax);
             const gradeAve = getGrade(resultAve);
 
-            // 結果を表示。
+            // 結果を表示
             resultDiv.innerHTML = `最低値 : ${resultMin} (${gradeMin})<br>平均値 : ${resultAve} (${gradeAve})<br>最大値 : ${resultMax} (${gradeMax})`;
         }
 
@@ -181,6 +155,7 @@
             input.addEventListener('input', calculate);
         });
 
+        // 初期計算
         calculate();
     </script>
 </body>
