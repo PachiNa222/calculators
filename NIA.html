@@ -54,9 +54,19 @@
     <div class="calculator">
         <h1>N.I.A.評価値計算機</h1>
         <h4>最終試験前の値を入力してください</h4>
-        <h6>親愛度20,FINALE,6万点以上20万点以下と仮定しています</h6>
-        <h6>ご了承の程よろしくお願いします</h6>
-        <h6>バグなどの連絡はX:@Cet_svまでお願いします</h6>
+        <h6>親愛度20,FINALE,合格と仮定しています<br>ご了承の程よろしくお願いします<br>バグなどの連絡はX:@Cet_svまでお願いします</h6>
+        <div class="input-group">
+            <label for="input1">1番目に得意なステータスボーナス</label>
+            <input type="number" id="input6" min="0" max="2000" value="0">
+        </div>
+        <div class="input-group">
+            <label for="input2">2番目に得意なステータスボーナス</label>
+            <input type="number" id="input7" min="0" max="2000" value="0">
+        </div>
+        <div class="input-group">
+            <label for="input3">3番目に得意なステータスボーナス</label>
+            <input type="number" id="input8" min="0" max="2000" value="0">
+        </div>
         <div class="input-group">
             <label for="input1">Vo</label>
             <input type="number" id="input1" min="0" max="2000" value="0">
@@ -90,11 +100,15 @@
 
             // Vo, Da, Viの合計値を計算
             const sum123 = values[0] + values[1] + values[2];
+            const Firstbonus = 1 + (values[5] / 100);
+            const Secondbonus = 1 + (values[6] / 100);
+            const Thirdbonus = 1 + (values[7] / 100);
+            const Maxbonus = (172 * Firstbonus) + (142 * Secondbonus) + (116 * Thirdbonus);
 
             // A, E, Fの計算
             const A = sum123 * 2.3;
-            const E = (sum123 + 430) * 2.3;
-            const F = (sum123 + 305) * 2.3;
+            const E = (sum123 + Maxbonus) * 2.3;
+            //const F = (sum123 + 305) * 2.3;
 
             // スコア修正値 B
             const B = values[4] * 0.16;
@@ -145,10 +159,10 @@
             // グレードを取得
             const gradeMin = getGrade(resultMin);
             const gradeMax = getGrade(resultMax);
-            const gradeAve = getGrade(resultAve);
+            //const gradeAve = getGrade(resultAve);
 
             // 結果を表示
-            resultDiv.innerHTML = `最低値 : ${resultMin} (${gradeMin})<br>平均値 : ${resultAve} (${gradeAve})<br>最大値 : ${resultMax} (${gradeMax})`;
+            resultDiv.innerHTML = `最低値 : ${resultMin} (${gradeMin})<br>最大値 : ${resultMax} (${gradeMax})`;
         }
 
         inputs.forEach(input => {
