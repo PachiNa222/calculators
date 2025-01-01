@@ -60,11 +60,12 @@
             const Secondbonus = 1 + (values[1] / 100);
             const Thirdbonus = 1 + (values[2] / 100);
             const Maxbonus = (172 * Firstbonus) + (142 * Secondbonus) + (116 * Thirdbonus);
+            const Avebonus = (172 * Firstbonus) + (106 * Secondbonus) + (58 * Thirdbonus);
 
             // A, E, Fの計算
             const A = sum123 * 2.3;
             const E = (sum123 + Maxbonus) * 2.3;
-            //const F = (sum123 + 305) * 2.3;
+            const F = (sum123 + Avebonus) * 2.3;
 
             // スコア修正値 B
             let B = 0;
@@ -121,7 +122,7 @@
             // 最小値、最大値、平均値を計算
             const resultMin = Math.ceil(A + D);
             const resultMax = Math.ceil(E + D);
-            //const resultAve = Math.ceil(F + D);
+            const resultAve = Math.ceil(F + D);
 
             // 評価計算
             function getGrade(result) {
@@ -139,10 +140,10 @@
             // グレードを取得
             const gradeMin = getGrade(resultMin);
             const gradeMax = getGrade(resultMax);
-            //const gradeAve = getGrade(resultAve);
+            const gradeAve = getGrade(resultAve);
 
             // 結果を表示
-            resultDiv.innerHTML = `最低値 : ${resultMin} (${gradeMin})<br>最大値 : ${resultMax} (${gradeMax})`;
+            resultDiv.innerHTML = `最小値 : ${resultMin} (${gradeMin})<br>予測値 : ${resultAve} (${gradeAve})<br>最大値 : ${resultMax} (${gradeMax})`;
         }
 
         inputs.forEach(input => {
