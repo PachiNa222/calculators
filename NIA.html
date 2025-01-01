@@ -67,10 +67,15 @@
             //const F = (sum123 + 305) * 2.3;
 
             // スコア修正値 B
-            const B = values[7] * 0.16;
+            let B = 0;
+            if(values[7] < 200000){
+                B = (values[7] * 0.16) + 3250;
+            }else{
+                B = (values[7] * 0.004787) + 34179;
+            }
 
             // C計算用変数を設定
-            let C = values[6] + B + 3250;
+            let C = values[6] + B;
 
             // Cに基づいてDを計算。
             let D = 0;
