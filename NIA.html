@@ -11,147 +11,75 @@
         <h1>NIA評価値計算機</h1>
         <h4>最終試験前の値を入力してください</h4>
         <h6>親愛度20,FINALEを仮定しています<br>最大値は各ステータス上昇が最大の場合の値です<br>バグなどの連絡はX:@Cet_svまでお願いします</h6>
+
         <div class="input-group">
-            <label for="input1">1番目に得意なステータスのボーナス</label>
-            <input type="number" id="input6" min="0" max="2000" value="0">
+            <label>1番目に得意なステータスのボーナス</label>
+            <input type="number" id="bonus1" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input2">2番目に得意なステータスのボーナス</label>
-            <input type="number" id="input7" min="0" max="2000" value="0">
+            <label>2番目に得意なステータスのボーナス</label>
+            <input type="number" id="bonus2" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input3">3番目に得意なステータスのボーナス</label>
-            <input type="number" id="input8" min="0" max="2000" value="0">
+            <label>3番目に得意なステータスのボーナス</label>
+            <input type="number" id="bonus3" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input1">Vo</label>
-            <input type="number" id="input1" min="0" max="2000" value="0">
+            <label>Vo</label>
+            <input type="number" id="vo" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input2">Da</label>
-            <input type="number" id="input2" min="0" max="2000" value="0">
+            <label>Da</label>
+            <input type="number" id="da" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input3">Vi</label>
-            <input type="number" id="input3" min="0" max="2000" value="0">
+            <label>Vi</label>
+            <input type="number" id="vi" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input4">ファン投票数</label>
-            <input type="number" id="input4" min="0" value="0">
+            <label>ファン投票数</label>
+            <input type="number" id="votes" min="0" value="0">
         </div>
         <div class="input-group">
-            <label for="input5">最終試験スコア</label>
-            <input type="number" id="input5" min="0" value="0">
+            <label>最終試験スコア</label>
+            <input type="number" id="score" min="0" value="0">
         </div>
+
         <div class="result" id="result">最低値: 0 (C)<br>最大値: 0 (C)</div>
     </div>
 
     <script>
-        const inputs = document.querySelectorAll('input');
-        const resultDiv = document.getElementById('result');
+        document.querySelectorAll('input').forEach(input => input.addEventListener('input', calculate));
 
         function calculate() {
-            // 入力値を取得
-            const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
+            const get = id => parseInt(document.getElementById(id).value) || 0;
+            const [b1, b2, b3, vo, da, vi, votes, score] = [
+                get('bonus1'), get('bonus2'), get('bonus3'), get('vo'), get('da'), get('vi'), get('votes'), get('score')
+            ];
 
-            // Vo, Da, Viの合計値を計算
-            const sum123 = values[3] + values[4] + values[5];
-            const Firstbonus = 1 + (values[0] / 100);
-            const Secondbonus = 1 + (values[1] / 100);
-            const Thirdbonus = 1 + (values[2] / 100);
-            const Maxbonus = (172 * Firstbonus) + (142 * Secondbonus) + (116 * Thirdbonus);
-            const Avebonus = (172 * Firstbonus) + (88 * Secondbonus) + (43 * Thirdbonus);
+            const sum = vo + da + vi;
+            const bonuses = [1 + b1 / 100, 1 + b2 / 100, 1 + b3 / 100];
+            const maxBonus = 172 * bonuses[0] + 142 * bonuses[1] + 116 * bonuses[2];
+            const avgBonus = 172 * bonuses[0] + 88 * bonuses[1] + 43 * bonuses[2];
+            const [A, E, F] = [sum * 2.3, (sum + maxBonus) * 2.3, (sum + avgBonus) * 2.3];
 
-            // A, E, Fの計算
-            const A = sum123 * 2.3;
-            const E = (sum123 + Maxbonus) * 2.3;
-            const F = (sum123 + Avebonus) * 2.3;
+            const B = votes < 200000 ? votes * 0.16 + 3250 : votes * 0.004787 + 34179;
+            let C = score + B, D = 0;
 
-            // スコア修正値 B
-            let B = 0;
-            if(values[7] < 200000){
-                B = (values[7] * 0.16) + 3250;
-            }else{
-                B = (values[7] * 0.004787) + 34179;
-            }
+            [[20000, 0.1], [20000, 0.085], [20000, 0.07], [20000, 0.065], [20000, 0.06], [Infinity, 0.055]].forEach(([limit, rate]) => {
+                if (C > 0) {
+                    const part = Math.min(C, limit);
+                    D += part * rate;
+                    C -= part;
+                }
+            });
 
-            // C計算用変数を設定
-            let C = values[6] + B;
+            const results = [Math.ceil(A + D), Math.ceil(F + D), Math.ceil(E + D)];
+            const grades = results.map(r => r < 4500 ? "C" : r < 6000 ? "C+" : r < 8000 ? "B" : r < 10000 ? "B+" : r < 11500 ? "A" : r < 13000 ? "A+" : r < 14500 ? "S" : r < 16000 ? "S+" : r < 18000 ? "SS" : "SS+");
 
-            // Cに基づいてDを計算。
-            let D = 0;
-            if(C - 20000 > 0){
-                D = D + 2000;
-            }else{
-                D = D + (C * 0.1);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1700;
-            }else if(C > 0){
-                D = D + (C * 0.085);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1400;
-            }else if(C > 0){
-                D = D + (C * 0.07);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1300;
-            }else if(C > 0){
-                D = D + (C * 0.065);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1200;
-            }else if(C > 0){
-                D = D + (C * 0.06);
-            }
-            C = C - 20000;
-
-            if(C > 0){
-                D = D + (C * 0.055);
-            }
-
-            // 最小値、最大値、平均値を計算
-            const resultMin = Math.ceil(A + D);
-            const resultMax = Math.ceil(E + D);
-            const resultAve = Math.ceil(F + D);
-
-            // 評価計算
-            function getGrade(result) {
-                if (result < 4500) return "C";
-                if (result < 6000) return "C+";
-                if (result < 8000) return "B";
-                if (result < 10000) return "B+";
-                if (result < 11500) return "A";
-                if (result < 13000) return "A+";
-                if (result < 14500) return "S";
-                if (result < 16000) return "S+";
-                if (result < 18000) return "SS";
-                return "SS+";
-            }
-
-            // グレードを取得
-            const gradeMin = getGrade(resultMin);
-            const gradeMax = getGrade(resultMax);
-            const gradeAve = getGrade(resultAve);
-
-            // 結果を表示
-            resultDiv.innerHTML = `最小値 : ${resultMin} (${gradeMin})<br>予測値 : ${resultAve} (${gradeAve})<br>最大値 : ${resultMax} (${gradeMax})`;
+            document.getElementById('result').innerHTML = `最小値 : ${results[0]} (${grades[0]})<br>予測値 : ${results[1]} (${grades[1]})<br>最大値 : ${results[2]} (${grades[2]})`;
         }
 
-        inputs.forEach(input => {
-            input.addEventListener('input', calculate);
-        });
-
-        // 初期計算
         calculate();
     </script>
 </body>
