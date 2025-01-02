@@ -12,28 +12,28 @@
         <h4>最終試験前の値を入力してください</h4>
         <h6>バグなどの連絡はX:@Cet_svまでお願いします</h6>
         <div class="input-group">
-            <label for="input1">Vo</label>
-            <input type="number" id="input1" min="0" max="2000" value="0">
+            <label for="vo">Vo</label>
+            <input type="number" id="vo" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input2">Da</label>
-            <input type="number" id="input2" min="0" max="2000" value="0">
+            <label for="da">Da</label>
+            <input type="number" id="da" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input3">Vi</label>
-            <input type="number" id="input3" min="0" max="2000" value="0">
+            <label for="vi">Vi</label>
+            <input type="number" id="vi" min="0" max="2000" value="0">
         </div>
         <div class="input-group">
-            <label for="input4">順位</label>
-            <input type="number" id="input4" min="1" max="4" value="1">
+            <label for="rank">順位</label>
+            <input type="number" id="rank" min="1" max="4" value="1">
         </div>
         <div class="input-group">
-            <label for="input6">ステータス上限</label>
-            <input type="number" id="input6" min="1000" max="1800" value="1800">
+            <label for="max-status">ステータス上限</label>
+            <input type="number" id="max-status" min="1000" max="1800" value="1800">
         </div>
         <div class="input-group">
-            <label for="input5">最終試験スコア</label>
-            <input type="number" id="input5" min="0" value="0">
+            <label for="score">最終試験スコア</label>
+            <input type="number" id="score" min="0" value="0">
         </div>
         <div class="result" id="result">評価値: 0 (C)</div>
     </div>
@@ -42,116 +42,69 @@
         const inputs = document.querySelectorAll('input');
         const resultDiv = document.getElementById('result');
 
-        function calculate() {
-            // 入力値を取得
-            const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
-
-            // 順位に基づくボーナスと加算値の設定
-            let bonus = 0;
-            let add = 0;
-
-            if (values[3] === 1) {
-                bonus = 30;
-                add = 1700;
-            } else if (values[3] === 2) {
-                bonus = 20;
-                add = 900;
-            } else if (values[3] === 3) {
-                bonus = 10;
-                add = 500;
+        function calculateBonus(rank) {
+            switch (rank) {
+                case 1: return { bonus: 30, add: 1700 };
+                case 2: return { bonus: 20, add: 900 };
+                case 3: return { bonus: 10, add: 500 };
+                default: return { bonus: 0, add: 0 };
             }
-
-            // ステータス値の補正
-            let Vo = values[0];
-            let Vi = values[1];
-            let Da = values[2];
-            const MAX = values[4]; // ステータス上限の正しい値
-
-            Vo = Math.min(Vo + bonus, MAX);
-            Vi = Math.min(Vi + bonus, MAX);
-            Da = Math.min(Da + bonus, MAX);
-
-            const Sum = Vo + Vi + Da;
-
-            // A, Dの計算
-            const A = Sum * 2.3;
-
-            // 最終試験スコアに基づく評価値修正
-            let D = 0;
-            let C = values[5]; // 最終試験スコア
-            if (C > 5000) {
-                D += 1500;
-                C -= 5000;
-            } else if (C > 0) {
-                D += C * 0.3;
-                C = 0;
-            }
-
-            if (C > 5000) {
-                D += 750;
-                C -= 5000;
-            } else if (C > 0) {
-                D += C * 0.15;
-                C = 0;
-            }
-
-            if (C > 10000) {
-                D += 800;
-                C -= 10000;
-            } else if (C > 0) {
-                D += C * 0.08;
-                C = 0;
-            }
-
-            if (C > 10000) {
-                D += 400;
-                C -= 10000;
-            } else if (C > 0) {
-                D += C * 0.04;
-                C = 0;
-            }
-
-            if (C > 10000) {
-                D += 200;
-                C -= 10000;
-            } else if (C > 0) {
-                D += C * 0.02;
-                C = 0;
-            }
-
-            if (C > 0) {
-                D += C * 0.01;
-            }
-
-            // 最終評価値
-            const resultMin = Math.ceil(A + D);
-
-            // 評価ランクの計算
-            function getGrade(result) {
-                if (result < 4500) return "C";
-                if (result < 6000) return "C+";
-                if (result < 8000) return "B";
-                if (result < 10000) return "B+";
-                if (result < 11500) return "A";
-                if (result < 13000) return "A+";
-                if (result < 14500) return "S";
-                if (result < 16000) return "S+";
-                if (result < 18000) return "SS";
-                return "SS+";
-            }
-
-            // ランク取得
-            const gradeMin = getGrade(resultMin);
-
-            // 結果を表示
-            resultDiv.innerHTML = `評価値 : ${resultMin} (${gradeMin})`;
         }
 
-        inputs.forEach(input => {
-            input.addEventListener('input', calculate);
-        });
+        function calculateScoreAdjustment(score) {
+            let adjustment = 0;
+            const thresholds = [5000, 5000, 10000, 10000, 10000];
+            const multipliers = [0.3, 0.15, 0.08, 0.04, 0.02];
 
-        // 初期計算
+            thresholds.forEach((threshold, i) => {
+                if (score > threshold) {
+                    adjustment += threshold * multipliers[i];
+                    score -= threshold;
+                } else {
+                    adjustment += score * multipliers[i];
+                    score = 0;
+                }
+            });
+            adjustment += score * 0.01;
+            return adjustment;
+        }
+
+        function getGrade(result) {
+            if (result < 4500) return "C";
+            if (result < 6000) return "C+";
+            if (result < 8000) return "B";
+            if (result < 10000) return "B+";
+            if (result < 11500) return "A";
+            if (result < 13000) return "A+";
+            if (result < 14500) return "S";
+            if (result < 16000) return "S+";
+            if (result < 18000) return "SS";
+            return "SS+";
+        }
+
+        function calculate() {
+            const vo = parseInt(document.getElementById('vo').value) || 0;
+            const da = parseInt(document.getElementById('da').value) || 0;
+            const vi = parseInt(document.getElementById('vi').value) || 0;
+            const rank = parseInt(document.getElementById('rank').value) || 1;
+            const maxStatus = parseInt(document.getElementById('max-status').value) || 1800;
+            const score = parseInt(document.getElementById('score').value) || 0;
+
+            const { bonus } = calculateBonus(rank);
+
+            const adjustedVo = Math.min(vo + bonus, maxStatus);
+            const adjustedDa = Math.min(da + bonus, maxStatus);
+            const adjustedVi = Math.min(vi + bonus, maxStatus);
+
+            const sum = adjustedVo + adjustedDa + adjustedVi;
+            const A = sum * 2.3;
+            const D = calculateScoreAdjustment(score);
+            const finalScore = Math.ceil(A + D);
+
+            resultDiv.innerHTML = `評価値: ${finalScore} (${getGrade(finalScore)})`;
+        }
+
+        inputs.forEach(input => input.addEventListener('input', calculate));
         calculate();
     </script>
 </body>
