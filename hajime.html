@@ -27,7 +27,7 @@
             <label for="input4">順位</label>
             <input type="number" id="input4" min="1" max="4" value="1">
         </div>
-      <div class="input-group">
+        <div class="input-group">
             <label for="input6">ステータス上限</label>
             <input type="number" id="input6" min="1000" max="1800" value="1800">
         </div>
@@ -44,120 +44,115 @@
 
         function calculate() {
             // 入力値を取得
-          const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
+            const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
 
-          let bonus = 0;
-          let add = 0;
-          if(values[3] == 1){
-            bonus = 30;
-            add = 1700;
-          }else if(values[3] == 2){
-            bonus = 20;
-            add = 900;
-          }else if(values[3] == 3){
-            bonus = 10;
-            add = 500;
-          }
+            // 順位に基づくボーナスと加算値の設定
+            let bonus = 0;
+            let add = 0;
 
+            if (values[3] === 1) {
+                bonus = 30;
+                add = 1700;
+            } else if (values[3] === 2) {
+                bonus = 20;
+                add = 900;
+            } else if (values[3] === 3) {
+                bonus = 10;
+                add = 500;
+            }
+
+            // ステータス値の補正
             let Vo = values[0];
             let Vi = values[1];
             let Da = values[2];
-            let MAX = values[4];
+            const MAX = values[4]; // ステータス上限の正しい値
 
-          if(Vo + bonus > MAX){
-            Vo = MAX;
-          }else{
-            Vo = Vo + bonus;
-          }
+            Vo = Math.min(Vo + bonus, MAX);
+            Vi = Math.min(Vi + bonus, MAX);
+            Da = Math.min(Da + bonus, MAX);
 
-          if(Vi + bonus > MAX){
-            Vi = MAX;
-          }else{
-            Vi = Vi + bonus;
-          }
+            const Sum = Vo + Vi + Da;
 
-          if(Da + bonus > MAX){
-            Da = MAX;
-          }else{
-            Da = Da + bonus;
-          }
+            // A, Dの計算
+            const A = Sum * 2.3;
 
-          const Sum = Vo + Vi + Da;
+            // 最終試験スコアに基づく評価値修正
+            let D = 0;
+            let C = values[5]; // 最終試験スコア
+            if (C > 5000) {
+                D += 1500;
+                C -= 5000;
+            } else if (C > 0) {
+                D += C * 0.3;
+                C = 0;
+            }
 
-          // A, E, Fの計算
-          const A = Sum * 2.3;
+            if (C > 5000) {
+                D += 750;
+                C -= 5000;
+            } else if (C > 0) {
+                D += C * 0.15;
+                C = 0;
+            }
 
-          // Cに基づいてDを計算。
-          let D = 0;
-          if(values[5] - 5000 > 0){
-              D = D + 1500;
-          }else if(values[5] > 0){
-              D = D + (values[5] * 0.3);
-          }
-          values[5] = values[5] - 5000;
+            if (C > 10000) {
+                D += 800;
+                C -= 10000;
+            } else if (C > 0) {
+                D += C * 0.08;
+                C = 0;
+            }
 
-          if(values[5] - 5000 > 0){
-              D = D + 750;
-          }else if(values[5] > 0){
-              D = D + (values[5] * 0.15);
-          }
-          values[5] = values[5] - 5000;
+            if (C > 10000) {
+                D += 400;
+                C -= 10000;
+            } else if (C > 0) {
+                D += C * 0.04;
+                C = 0;
+            }
 
-          if(values[5] - 10000 > 0){
-              D = D + 800;
-          }else if(values[5] > 0){
-              D = D + (values[5] * 0.08);
-          }
-          values[5] = values[5] - 10000;
+            if (C > 10000) {
+                D += 200;
+                C -= 10000;
+            } else if (C > 0) {
+                D += C * 0.02;
+                C = 0;
+            }
 
-          if(values[5] - 10000 > 0){
-              D = D + 400;
-          }else if(values[5] > 0){
-              D = D + (values[5] * 0.04);
-          }
-          values[5] = values[5] - 10000;
+            if (C > 0) {
+                D += C * 0.01;
+            }
 
-          if(values[5] - 10000 > 0){
-              D = D + 200;
-          }else if(values[5] > 0){
-              D = D + (values[5] * 0.02);
-          }
-          values[5] = values[5] - 10000;
+            // 最終評価値
+            const resultMin = Math.ceil(A + D);
 
-          if(values[5] > 0){
-              D = D + (values[5] * 0.01);
-          }
+            // 評価ランクの計算
+            function getGrade(result) {
+                if (result < 4500) return "C";
+                if (result < 6000) return "C+";
+                if (result < 8000) return "B";
+                if (result < 10000) return "B+";
+                if (result < 11500) return "A";
+                if (result < 13000) return "A+";
+                if (result < 14500) return "S";
+                if (result < 16000) return "S+";
+                if (result < 18000) return "SS";
+                return "SS+";
+            }
 
-          // 最小値、最大値、平均値を計算
-          const resultMin = Math.ceil(A + D);
+            // ランク取得
+            const gradeMin = getGrade(resultMin);
 
-          // 評価計算
-          function getGrade(result) {
-            if (result < 4500) return "C";
-            if (result < 6000) return "C+";
-            if (result < 8000) return "B";
-            if (result < 10000) return "B+";
-            if (result < 11500) return "A";
-            if (result < 13000) return "A+";
-            if (result < 14500) return "S";
-            if (result < 16000) return "S+";
-            if (result < 18000) return "SS";
-            return "SS+";
-          }
+            // 結果を表示
+            resultDiv.innerHTML = `評価値 : ${resultMin} (${gradeMin})`;
+        }
 
-          // グレードを取得
-          const gradeMin = getGrade(resultMin);
+        inputs.forEach(input => {
+            input.addEventListener('input', calculate);
+        });
 
-          // 結果を表示
-          resultDiv.innerHTML = `評価値 : ${resultMin} (${gradeMin})`;
-      }
-
-      inputs.forEach(input => {
-          input.addEventListener('input', calculate);
-      });
-
-      // 初期計算
-      calculate();
+        // 初期計算
+        calculate();
     </script>
 </body>
 </html>
