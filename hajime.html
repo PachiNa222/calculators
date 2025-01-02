@@ -59,28 +59,33 @@
             add = 500;
           }
 
-          if(values[0] + bonus > values[4]){
-            values[0] = values[4];
+            let Vo = values[0];
+            let Vi = values[1];
+            let Da = values[2];
+            let MAX = values[4];
+
+          if(Vo + bonus > MAX){
+            Vo = MAX;
           }else{
-            values[0] = values[0] + bonus;
+            Vo = Vo + bonus;
           }
 
-          if(values[1] + bonus > values[4]){
-            values[1] = values[4];
+          if(Vi + bonus > MAX){
+            Vi = MAX;
           }else{
-            values[1] = values[1] + bonus;
+            Vi = Vi + bonus;
           }
 
-          if(values[2] + bonus > values[4]){
-            values[2] = values[4];
+          if(Da + bonus > MAX){
+            Da = MAX;
           }else{
-            values[2] = values[2] + bonus;
+            Da = Da + bonus;
           }
 
-          const sum123 = values[0] + values[1] + values[2];
+          const Sum = Vo + Vi + Da;
 
           // A, E, Fの計算
-          const A = sum123 * 2.3;
+          const A = Sum * 2.3;
 
           // Cに基づいてDを計算。
           let D = 0;
@@ -96,9 +101,9 @@
           }else if(values[5] > 0){
               D = D + (values[5] * 0.15);
           }
-          values[0] = values[0] - 5000;
+          values[5] = values[5] - 5000;
 
-          if(values[0] - 10000 > 0){
+          if(values[5] - 10000 > 0){
               D = D + 800;
           }else if(values[5] > 0){
               D = D + (values[5] * 0.08);
