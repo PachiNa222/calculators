@@ -126,7 +126,8 @@
 
             // 評価計算
             function getGrade(result) {
-                if (result < 6000) return "C";
+                if (result < 4500) return "C";
+                if (result < 6000) return "C+";
                 if (result < 8000) return "B";
                 if (result < 10000) return "B+";
                 if (result < 11500) return "A";
