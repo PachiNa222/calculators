@@ -10,7 +10,17 @@
     <div class="calculator">
         <h1>NIA評価値計算機</h1>
         <h4>最終試験前の値を入力してください</h4>
-        <h6>親愛度20,FINALEを仮定しています<br>最大値は各ステータス上昇が最大の場合の値です<br>バグなどの連絡はX:@Cet_svまでお願いします</h6>
+        <h6>親愛度20,FINALEを仮定しています<br>最大値は各ステータス上昇が最大の場合の値です<br>バグなどの連絡はX:@Cet_svまでお願いします<br>現在メンテナンス中</h6>
+        <div class="input-group">
+            <select name="Trend">
+                <option value="1" selected>Vo＞Da＞Vi</option>
+                <option value="2">Vo＞Vi＞Da</option>
+                <option value="3">Da＞Vo＞Vi</option>
+                <option value="4">Da＞Vi＞Vo</option>
+                <option value="5">Vi＞Vo＞Da</option>
+                <option value="6">Vi＞Da＞Vo</option>
+            </select>
+        </div>
         <div class="input-group">
             <label for="input1">1番目に得意なステータスのボーナス</label>
             <input type="number" id="input6" min="0" max="2000" value="0">
@@ -55,11 +65,16 @@
             const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
 
             // Vo, Da, Viの合計値を計算
-            const sum123 = values[3] + values[4] + values[5];
+            let Vo = values[3];
+            let Da = values[4];
+            let Vi = values[5];
             const Firstbonus = 1 + (values[0] / 100);
             const Secondbonus = 1 + (values[1] / 100);
             const Thirdbonus = 1 + (values[2] / 100);
-            const Maxbonus = (172 * Firstbonus) + (142 * Secondbonus) + (116 * Thirdbonus);
+            const MaxFirstbonus = (172 * Firstbonus);
+            const MaxSecondbonus = (142 * Secondbonus);
+            const MaxThirdbonus = (116 * Thirdbonus);
+            const Maxbonus = MaxFirstbonus + MaxSecondbonus + MaxThirdbonus;
             const Avebonus = (172 * Firstbonus) + (88 * Secondbonus) + (43 * Thirdbonus);
 
             // A, E, Fの計算
