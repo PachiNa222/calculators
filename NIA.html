@@ -65,12 +65,13 @@
             const trendSelect = document.querySelector('select[name="Trend"]');
             const Trend = parseInt(trendSelect.value, 10);
         
-            let Vo = values[4];
-            let Da = values[5];
-            let Vi = values[6];
-            const Vobonus = 1 + (values[1] / 100);
-            const Dabonus = 1 + (values[2] / 100);
-            const Vibonus = 1 + (values[3] / 100);
+            let Vo = values[3];
+            let Da = values[4];
+            let Vi = values[5];
+            const Vobonus = 1 + (values[0] / 100);
+            const Dabonus = 1 + (values[1] / 100);
+            const Vibonus = 1 + (values[2] / 100);
+            const A = (Vo + Da + Vi) * 2.3;
         
             let MaxVobonus = 0, MaxDabonus = 0, MaxVibonus = 0;
         
@@ -82,37 +83,75 @@
                 MaxVobonus = 172 * Vobonus;
                 MaxDabonus = 116 * Dabonus;
                 MaxVibonus = 142 * Vibonus;
+            }else if(Trend == 3){
+                MaxVobonus = (142 * Vobonus);
+                MaxDabonus = (172 * Dabonus);
+                MaxVibonus = (116 * Vibonus);
+            }else if(Trend == 4){
+                MaxVobonus = (116 * Vobonus);
+                MaxDabonus = (172 * Dabonus);
+                MaxVibonus = (142 * Vibonus);
+            }else if(Trend == 5){
+                MaxVobonus = (142 * Vobonus);
+                MaxDabonus = (116 * Dabonus);
+                MaxVibonus = (172 * Vibonus);
+            }else if(Trend == 6){
+                MaxVobonus = (116 * Vobonus);
+                MaxDabonus = (142 * Dabonus);
+                MaxVibonus = (172 * Vibonus);
             }
-            // 他のTrend条件も同様に記載
         
             Vo = Math.min(Vo + MaxVobonus, 2000);
             Da = Math.min(Da + MaxDabonus, 2000);
             Vi = Math.min(Vi + MaxVibonus, 2000);
         
-            const A = (Vo + Da + Vi) * 2.3;
-            const E = (Vo + Da + Vi + MaxVobonus + MaxDabonus + MaxVibonus) * 2.3;
+            //const A = (Vo + Da + Vi) * 2.3;
+            const E = (Vo + Da + Vi) * 2.3;
         
-            let B = values[7] < 200000 
-                ? values[7] * 0.16 + 3250 
-                : values[7] * 0.004787 + 34179;
+             // スコア修正値 B
+            let B = 0;
+            if(values[7] < 200000){
+                B = (values[7] * 0.16) + 3250;
+            }else{
+                B = (values[7] * 0.004787) + 34179;
+            }
         
-            let C = values[8] + B; // 最終試験スコア + ファン投票スコア
+            let C = values[7] + B; // 最終試験スコア + ファン投票スコア
+            
             let D = 0;
-        
-            const thresholds = [20000, 20000, 20000, 20000, 20000];
-            const rates = [0.1, 0.085, 0.07, 0.065, 0.06];
-        
-            thresholds.forEach((threshold, index) => {
-                if (C > threshold) {
-                    D += threshold * rates[index];
-                    C -= threshold;
-                } else {
-                    D += C * rates[index];
-                    C = 0;
-                }
-            });
-        
-            if (C > 0) D += C * 0.055;
+            if(C - 20000 > 0){
+                D = D + 2000;
+            }else{
+                D = D + (C * 0.1);
+            }
+            C = C - 20000;
+            if(C - 20000 > 0){
+                D = D + 1700;
+            }else if(C > 0){
+                D = D + (C * 0.085);
+            }
+            C = C - 20000;
+            if(C - 20000 > 0){
+                D = D + 1400;
+            }else if(C > 0){
+                D = D + (C * 0.07);
+            }
+            C = C - 20000;
+            if(C - 20000 > 0){
+                D = D + 1300;
+            }else if(C > 0){
+                D = D + (C * 0.065);
+            }
+            C = C - 20000;
+            if(C - 20000 > 0){
+                D = D + 1200;
+            }else if(C > 0){
+                D = D + (C * 0.06);
+            }
+            C = C - 20000;
+            if(C > 0){
+                D = D + (C * 0.055);
+            }
         
             const resultMin = Math.ceil(A + D);
             const resultMax = Math.ceil(E + D);
