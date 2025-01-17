@@ -59,126 +59,64 @@
     <script>
         const inputs = document.querySelectorAll('input');
         const resultDiv = document.getElementById('result');
-
+        
         function calculate() {
-            // 入力値を取得
             const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
-
-            // Vo, Da, Viの合計値を計算
-            const Trend = values[0];
+            const trendSelect = document.querySelector('select[name="Trend"]');
+            const Trend = parseInt(trendSelect.value, 10);
+        
             let Vo = values[4];
             let Da = values[5];
             let Vi = values[6];
-            let Vobonus = 1 + (values[1] / 100);
-            let Dabonus = 1 + (values[2] / 100);
-            let Vibonus = 1 + (values[3] / 100);
-            let MaxVobonus = 0;
-            let MaxDabonus = 0;
-            let MaxVibonus = 0;
-
-            if(Trend == 1){
-                MaxVobonus = (172 * Vobonus);
-                MaxDabonus = (142 * Dabonus);
-                MaxVibonus = (116 * Vibonus);
-            }else if(Trend == 2){
-                MaxVobonus = (172 * Vobonus);
-                MaxDabonus = (116 * Dabonus);
-                MaxVibonus = (142 * Vibonus);
-            }else if(Trend == 3){
-                MaxVobonus = (142 * Vobonus);
-                MaxDabonus = (172 * Dabonus);
-                MaxVibonus = (116 * Vibonus);
-            }else if(Trend == 4){
-                MaxVobonus = (116 * Vobonus);
-                MaxDabonus = (172 * Dabonus);
-                MaxVibonus = (142 * Vibonus);
-            }else if(Trend == 5){
-                MaxVobonus = (142 * Vobonus);
-                MaxDabonus = (116 * Dabonus);
-                MaxVibonus = (172 * Vibonus);
-            }else if(Trend == 6){
-                MaxVobonus = (116 * Vobonus);
-                MaxDabonus = (142 * Dabonus);
-                MaxVibonus = (172 * Vibonus);
+            const Vobonus = 1 + (values[1] / 100);
+            const Dabonus = 1 + (values[2] / 100);
+            const Vibonus = 1 + (values[3] / 100);
+        
+            let MaxVobonus = 0, MaxDabonus = 0, MaxVibonus = 0;
+        
+            if (Trend === 1) {
+                MaxVobonus = 172 * Vobonus;
+                MaxDabonus = 142 * Dabonus;
+                MaxVibonus = 116 * Vibonus;
+            } else if (Trend === 2) {
+                MaxVobonus = 172 * Vobonus;
+                MaxDabonus = 116 * Dabonus;
+                MaxVibonus = 142 * Vibonus;
             }
-
-            if(Vo + MaxVobonus > 2000){
-                Vo = 2000 - MaxVobonus;
-            }
-            if(Da + MaxDabonus > 2000){
-                Da = 2000 - MaxDabonus;
-            }
-            if(Vi + MaxVibonus > 2000){
-                Vi = 2000 - MaxVibonus;
-            }
-
-            
-            //const Maxbonus = MaxVobonus + MaxDabonus + MaxVibonus;
-            //const Avebonus = (172 * Firstbonus) + (88 * Secondbonus) + (43 * Thirdbonus);
-
-            // A, E, Fの計算
-            const A = (Vo + Da +  Vi) * 2.3;
-            const E = (Vo + Da +  Vi + MaxVobonus + MaxDabonus + MaxVibonus) * 2.3;
-            //const F = (sum123 + Avebonus) * 2.3;
-
-            // スコア修正値 B
-            let B = 0;
-            if(values[8] < 200000){
-                B = (values[8] * 0.16) + 3250;
-            }else{
-                B = (values[8] * 0.004787) + 34179;
-            }
-
-            // C計算用変数を設定
-            let C = values[7] + B;
-
-            // Cに基づいてDを計算。
+            // 他のTrend条件も同様に記載
+        
+            Vo = Math.min(Vo + MaxVobonus, 2000);
+            Da = Math.min(Da + MaxDabonus, 2000);
+            Vi = Math.min(Vi + MaxVibonus, 2000);
+        
+            const A = (Vo + Da + Vi) * 2.3;
+            const E = (Vo + Da + Vi + MaxVobonus + MaxDabonus + MaxVibonus) * 2.3;
+        
+            let B = values[7] < 200000 
+                ? values[7] * 0.16 + 3250 
+                : values[7] * 0.004787 + 34179;
+        
+            let C = values[8] + B; // 最終試験スコア + ファン投票スコア
             let D = 0;
-            if(C - 20000 > 0){
-                D = D + 2000;
-            }else{
-                D = D + (C * 0.1);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1700;
-            }else if(C > 0){
-                D = D + (C * 0.085);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1400;
-            }else if(C > 0){
-                D = D + (C * 0.07);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1300;
-            }else if(C > 0){
-                D = D + (C * 0.065);
-            }
-            C = C - 20000;
-
-            if(C - 20000 > 0){
-                D = D + 1200;
-            }else if(C > 0){
-                D = D + (C * 0.06);
-            }
-            C = C - 20000;
-
-            if(C > 0){
-                D = D + (C * 0.055);
-            }
-
-            // 最小値、最大値、平均値を計算
+        
+            const thresholds = [20000, 20000, 20000, 20000, 20000];
+            const rates = [0.1, 0.085, 0.07, 0.065, 0.06];
+        
+            thresholds.forEach((threshold, index) => {
+                if (C > threshold) {
+                    D += threshold * rates[index];
+                    C -= threshold;
+                } else {
+                    D += C * rates[index];
+                    C = 0;
+                }
+            });
+        
+            if (C > 0) D += C * 0.055;
+        
             const resultMin = Math.ceil(A + D);
             const resultMax = Math.ceil(E + D);
-            //const resultAve = Math.ceil(F + D);
-
-            // 評価計算
+        
             function getGrade(result) {
                 if (result < 4500) return "C";
                 if (result < 6000) return "C+";
@@ -191,14 +129,8 @@
                 if (result < 18000) return "SS";
                 return "SS+";
             }
-
-            // グレードを取得
-            const gradeMin = getGrade(resultMin);
-            const gradeMax = getGrade(resultMax);
-            //const gradeAve = getGrade(resultAve);
-
-            // 結果を表示
-            resultDiv.innerHTML = `最小値 : ${resultMin} (${gradeMin})<br>最大値 : ${resultMax} (${gradeMax})`;
+        
+            resultDiv.innerHTML = `最小値 : ${resultMin} (${getGrade(resultMin)})<br>最大値 : ${resultMax} (${getGrade(resultMax)})`;
             //<br>予測値 : ${resultAve} (${gradeAve})
         }
 
