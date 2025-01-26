@@ -112,6 +112,38 @@ body {
     }
 }
 
+.indexbutton01 {
+  display: inline-block;
+  background: linear-gradient(to right, #ffeede 0%, #ffddb8 50%, #ffc68f 100%);
+  background-size: 200% auto;  
+  color: #9f3d10;
+  border-radius: 20px;
+  padding: 10px 30px;
+  text-decoration: none;
+  font-size: 1em;
+  transition: .5s;
+}
+.indexbutton01:hover {
+  color: #9f3d10;
+  background-position: right center;
+}
+
+.indexbutton02 {
+  display: inline-block;
+  background: linear-gradient(to right, #9664da 0%, #743edf 50%, #3c26a2 100%);
+  background-size: 200% auto;  
+  color: #e8cf09;
+  border-radius: 20px;
+  padding: 10px 30px;
+  text-decoration: none;
+  font-size: 1em;
+  transition: .5s;
+}
+.indexbutton02:hover {
+  color: #e8cf09;
+  background-position: right center;
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
     body {
