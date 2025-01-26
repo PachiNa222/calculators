@@ -116,7 +116,7 @@ body {
   display: inline-block;
   background: linear-gradient(to right, #ffeede 0%, #ffddb8 50%, #ffc68f 100%);
   background-size: 200% auto;  
-  color: #9f3d10;
+  color: #fff;
   border-radius: 20px;
   padding: 10px 30px;
   text-decoration: none;
@@ -124,7 +124,7 @@ body {
   transition: .5s;
 }
 .indexbutton01:hover {
-  color: #9f3d10;
+  color: #fff;
   background-position: right center;
 }
 
@@ -132,7 +132,7 @@ body {
   display: inline-block;
   background: linear-gradient(to right, #9664da 0%, #743edf 50%, #3c26a2 100%);
   background-size: 200% auto;  
-  color: #e8cf09;
+  color: #fff;
   border-radius: 20px;
   padding: 10px 30px;
   text-decoration: none;
@@ -140,7 +140,7 @@ body {
   transition: .5s;
 }
 .indexbutton02:hover {
-  color: #e8cf09;
+  color: #fff;
   background-position: right center;
 }
 
