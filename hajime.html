@@ -48,18 +48,18 @@
     <script>
         const inputs = document.querySelectorAll('input');
         const resultDiv = document.getElementById('result');
+        const MaxSelect = document.querySelector('select[name="Max"]');
 
         function calculate() {
             // 入力値を取得
             const values = Array.from(inputs).map(input => parseInt(input.value) || 0);
-            const MaxSelect = document.querySelector('select[name="Max"]');
             const Max = parseInt(MaxSelect.value, 10);
 
             // 順位に基づくボーナスと加算値の設定
             let bonus = 0;
             let add = 0;
 
-            if (values[3] === 1) {
+            if (values[3] === 1) {  // 順位
                 bonus = 30;
                 add = 1700;
             } else if (values[3] === 2) {
@@ -69,6 +69,9 @@
                 bonus = 10;
                 add = 500;
             }
+            
+            let C = values[5];  // 最終試験スコア
+
 
             // ステータス値の補正
             let Vo = values[0];
@@ -76,9 +79,10 @@
             let Da = values[2];
             //const MAX = values[4]; // ステータス上限の正しい値
 
-            Vo = Math.min(Vo + bonus, MAX);
-            Vi = Math.min(Vi + bonus, MAX);
-            Da = Math.min(Da + bonus, MAX);
+            Vo = Math.min(Vo + bonus, Max);
+            Vi = Math.min(Vi + bonus, Max);
+            Da = Math.min(Da + bonus, Max);
+
 
             const Sum = Vo + Vi + Da;
 
@@ -159,6 +163,7 @@
         inputs.forEach(input => {
             input.addEventListener('input', calculate);
         });
+        MaxSelect.addEventListener('change', calculate);
 
         // 初期計算
         calculate();
