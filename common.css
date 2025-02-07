@@ -112,9 +112,9 @@ body {
     }
 }
 
-.indexbutton01 {
+.button10 {
   display: inline-block;
-  background: linear-gradient(to right, #ffeede 0%, #ffddb8 50%, #ffc68f 100%);
+  background: linear-gradient(to right, #00bfff 0%, #7fffd4 45%, #fffacd 100%);
   background-size: 200% auto;  
   color: #fff;
   border-radius: 20px;
@@ -123,23 +123,7 @@ body {
   font-size: 1em;
   transition: .5s;
 }
-.indexbutton01:hover {
-  color: #fff;
-  background-position: right center;
-}
-
-.indexbutton02 {
-  display: inline-block;
-  background: linear-gradient(to right, #9664da 0%, #743edf 50%, #3c26a2 100%);
-  background-size: 200% auto;  
-  color: #fff;
-  border-radius: 20px;
-  padding: 10px 30px;
-  text-decoration: none;
-  font-size: 1em;
-  transition: .5s;
-}
-.indexbutton02:hover {
+.button10:hover {
   color: #fff;
   background-position: right center;
 }
