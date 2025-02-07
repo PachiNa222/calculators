@@ -131,6 +131,25 @@ body {
   background-position: right center;
 }
 
+.button11 {
+  display: inline-block; /* aタグをボタン風にする */
+  background: linear-gradient(to right, #9468c6 0%, #4c3ac5 50%,#3a259d 100%);
+  background-size: 200% auto;  
+  color: #e8cf09 !important; /* 色を強制適用 */
+  border-radius: 20px;
+  padding: 10px 30px;
+  text-decoration: none;
+  font-size: 1em;
+  text-align: center; /* テキストを中央揃え */
+  transition: .5s;
+  margin: 10px; /* 余白を追加 */
+}
+
+.button11:hover {
+  color: #e8cf09 !important;
+  background-position: right center;
+}
+
 /* レスポンシブ対応 */
 @media (max-width: 768px) {
     body {
