@@ -114,9 +114,9 @@ body {
 
 .button10 {
   display: inline-block; /* aタグをボタン風にする */
-  background: linear-gradient(to right, #00bfff 0%, #7fffd4 45%, #fffacd 100%);
+  background: linear-gradient(to right, #ffddb8 0%, #ffc68f 100%);
   background-size: 200% auto;  
-  color: #fff !important; /* 色を強制適用 */
+  color: #684e32 !important; /* 色を強制適用 */
   border-radius: 20px;
   padding: 10px 30px;
   text-decoration: none;
@@ -127,7 +127,7 @@ body {
 }
 
 .button10:hover {
-  color: #fff !important;
+  color: #684e32 !important;
   background-position: right center;
 }
 
