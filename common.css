@@ -114,7 +114,7 @@ body {
 
 .button10 {
   display: inline-block; /* aタグをボタン風にする */
-  background: linear-gradient(to right, #ffeede 0%, #ffddb8 33%, #ffc68f 66%, #ba553c 100%);
+  background: linear-gradient(to right, #ffeede 0%, #ffddb8 50%, #ffc68f 100%);
   background-size: 200% auto;  
   color: #684e32 !important; /* 色を強制適用 */
   border-radius: 20px;
