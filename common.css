@@ -123,7 +123,7 @@ body {
   font-size: 1em;
   text-align: center; /* テキストを中央揃え */
   transition: .5s;
-  margin: 10px 0; /* 余白を追加 */
+  margin: 10px; /* 余白を追加 */
 }
 
 .button10:hover {
